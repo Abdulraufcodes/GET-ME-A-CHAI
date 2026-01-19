@@ -136,7 +136,7 @@ const PaymentPage = ({ username }) => {
                                 className={`w-full rounded-lg font-medium text-sm px-4 py-2.5 text-center leading-5 p-2 
                                 ${isDisable
                                     ? 'bg-gray-400 cursor-not-allowed opacity-50'  // Disabled Style
-                                    : 'bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl' // Active Style
+                                    : 'bg-linear-to-br from-purple-600 to-blue-500 hover:bg-linear-to-bl' // Active Style
                                 }`}
                             >
                                 Pay
