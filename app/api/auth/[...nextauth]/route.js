@@ -37,6 +37,9 @@ export const authOptions = NextAuth({
     },
     //session callback - used to sync users to db
     async session({session, user, token}) {
+
+      await connectDb();
+
     const dbUser = await User.findOne({email: session.user.email})
     session.user.name = dbUser.username
     return session
