@@ -1,8 +1,7 @@
 import NextAuth from "next-auth"
 import GithubProvider from "next-auth/providers/github"
-import mongoose from "mongoose"
+import GoogleProvider from "next-auth/providers/google"
 import User from "@/models/User"
-import Payment from "@/models/Payment"
 import connectDb from "@/db/connectDb"
 
 export const authOptions = NextAuth({
@@ -12,12 +11,16 @@ export const authOptions = NextAuth({
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
     }),
-    // ...add more providers here
+    
+    GoogleProvider({
+      clientId: process.env.GOOGLE_ID,
+      clientSecret: process.env.GOOGLE_SECRET,
+    }),
   ],
   callbacks: {
     //signIn callback - used to allow on deny signIn
     async signIn({ user, account, profile}) {
-      if (account.provider == 'github') {
+      if (account.provider == 'github' || account.provider == 'google') {
         //connect to the database
         await connectDb();
         // const client = await mongoose.connect('mongodb://localhost:27017/chai') //we have made seperate file to connect to db
