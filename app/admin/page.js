@@ -9,19 +9,28 @@ export default function AdminPage() {
   const [users, setUsers] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
 
-  // 🔥 Fetch users from API
+  // Fetch users from API
   useEffect(() => {
-    if (session?.user?.role === "admin") {
-      fetch("/api/admin/users")
-        .then((res) => res.json())
-        .then((data) => {
-          setUsers(data);
-          setLoadingData(false);
-        });
-    }
-  }, [session]);
+  if (session?.user?.role === "admin") {
+    fetch("/api/admin/users")
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error("Not authorized or API failed");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setUsers(data);
+        setLoadingData(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoadingData(false);
+      });
+  }
+}, [session]);
 
-  // 🔄 Session loading
+  //  Session loading
   if (status === "loading") {
     return (
       <div className="flex items-center justify-center min-h-screen text-white">
@@ -30,7 +39,7 @@ export default function AdminPage() {
     );
   }
 
-  // 🔐 RBAC protection
+  //  RBAC protection
   if (!session || session.user.role !== "admin") {
     return (
       <div className="flex items-center justify-center min-h-screen text-red-500">
