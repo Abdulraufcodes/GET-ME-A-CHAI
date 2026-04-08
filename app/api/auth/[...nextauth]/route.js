@@ -32,11 +32,27 @@ export const authOptions = NextAuth({
             //create a new user
             email: user.email,
             username: user.email.split("@")[0],
+            role:"user"
           })
           await newUser.save()
         }
         return true
       }
+    },
+    //JWT callback for role based access
+    async jwt({token,user}){
+      await connectDb();
+
+      //run only if login
+      if(user){
+        const dbUser = await User.findOne({ email: user.email });
+        if(dbUser){
+          token.role = dbUser.role;
+          token.username = dbUser.username;
+        }
+      }
+      
+      return token;
     },
     //session callback - used to sync users to db
     async session({session, user, token}) {
@@ -44,6 +60,7 @@ export const authOptions = NextAuth({
       await connectDb();
 
     const dbUser = await User.findOne({email: session.user.email})
+    session.user.role = token.role;
     session.user.name = dbUser.username
     return session
   }
