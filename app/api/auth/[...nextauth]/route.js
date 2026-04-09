@@ -4,7 +4,7 @@ import GoogleProvider from "next-auth/providers/google"
 import User from "@/models/User"
 import connectDb from "@/db/connectDb"
 
-export const authOptions = NextAuth({
+export const authOptions = ({
   // Configure one or more authentication providers
   providers: [
     GithubProvider({
@@ -68,4 +68,6 @@ export const authOptions = NextAuth({
   
 })
 
-export { authOptions as GET, authOptions as POST }
+const handler = NextAuth(authOptions);
+
+export { handler as GET, handler as POST };
