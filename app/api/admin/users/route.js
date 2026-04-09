@@ -1,9 +1,9 @@
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../auth/[...nextauth]/route";
 import connectDb from "@/db/connectDb";
 import User from "@/models/User";
 
-export async function GET() {
+export async function GET(req) {
   const session = await getServerSession(authOptions);
 
   if (!session || session.user.role !== "admin") {
